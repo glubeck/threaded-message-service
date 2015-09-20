@@ -99,6 +99,8 @@ protected:
     Message* parse_request(string);
     string get_value(int, int, string);
     void store(string, int);
+    string getList(string);
+    string retrieveMessage(string, int);
     int server_;
     int buflen_;
     char* buf_;
@@ -106,17 +108,17 @@ protected:
 
     void storeMessage(Message* message) {
 
-      string fileName = message->fileName;
+      string name = message->name;
       
-      if(messageMap.find(fileName) == messageMap.end()) {
+      if(messageMap.find(name) == messageMap.end()) {
 	//not present in map
 	vector<Message*> messages;
 	messages.push_back(message);
-	messageMap[fileName]=messages;
+	messageMap[name]=messages;
       }
       else {
 	//name already present in map
-	messageMap[fileName].push_back(message);
+	messageMap[name].push_back(message);
       }
     }
 

@@ -46,32 +46,49 @@ Server::serve() {
 void
 Server::handle(int client) {
     // loop to handle all requests
-  string request = get_request(client);
-  string cache = request;
+  
+ 
 
-  cout << cache << endl;
+   string cache = "";
 
   while (1) {
+   
+    string request = get_request(client);
     
     if (request.empty())
       break;
-
+    
+    cache = request;
     bool needed = false;
-
     
     //split the message from the cache
     vector<string> halves = half(request);
    
-    //split the message into three parts
+    //split the message into parts
     vector<string> elements = split(halves[0], ' ');
     
     if(elements[0] == "put" && elements.size() == 4) {
-      cout << "will store" << endl;
+      //cout << "will store" << endl;
       store(cache, client);
-    }    
-    
-    request = "";
+      send_response(client, "OK\n");
     }
+
+    if(elements[0] == "list" && elements.size() == 2) {
+      string list = getList(elements[1]);
+      send_response(client, list);
+    }
+
+    if(elements[0] == "get" && elements.size() == 3) {
+      string message = retrieveMessage(elements[1], atoi(elements[2].c_str()));
+      send_response(client, message);
+    }
+
+    if(elements[0] == "reset" && elements.size() == 1) {
+      messageMap.clear();
+      send_response(client, "OK\n");
+    }
+    
+  }
   close(client);
 }
 
@@ -134,10 +151,10 @@ void Server::store(string cache, int client) {
   storeMessage(message);
   
   //print out the responsee
-  stringstream ss;
-  ss << message->value.length();
-  cout << "Stored a file called " + message->fileName
-    + " with " + ss.str() + " bytes" << endl;
+  //stringstream ss;
+  //ss << message->value.length();
+  //cout << "Stored a file called " + message->fileName
+  //  + " with " + ss.str() + " bytes" << endl;
   
 }
 
@@ -307,4 +324,41 @@ bool Server::containsNewline(string str) {
     }
   }
   return false;
+}
+
+string Server::getList(string name) {
+
+  vector<Message*> messages = messageMap[name];
+
+  stringstream size;
+  size << messages.size();
+  
+  string response = "list " + size.str() + "\n";
+
+  for(int i = 0; i < messages.size(); i++) {
+
+    stringstream index;
+    index << i+1;
+    
+    response += index.str() + " " + messages[i]->fileName + "\n";
+
+  }
+
+  return response;
+  
+}
+
+string Server::retrieveMessage(string name, int index) {
+
+  string response = "message ";
+  vector<Message*> messages = messageMap[name];
+  Message* message = messages[index-1];
+
+  stringstream messageLength;
+  messageLength << message->length;
+  
+  response += message->fileName + " " + messageLength.str() + "\n" + message->value;
+
+  return response;
+
 }
