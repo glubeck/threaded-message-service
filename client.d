@@ -32,18 +32,10 @@ client.o client.d : client.cc /usr/include/stdc-predef.h client.h \
  /usr/include/string.h /usr/include/unistd.h \
  /usr/include/bits/posix_opt.h /usr/include/bits/environments.h \
  /usr/include/bits/confname.h /usr/include/getopt.h \
- /usr/include/c++/4.8.3/fstream /usr/include/c++/4.8.3/istream \
- /usr/include/c++/4.8.3/ios /usr/include/c++/4.8.3/iosfwd \
+ /usr/include/c++/4.8.3/vector /usr/include/c++/4.8.3/bits/stl_algobase.h \
  /usr/include/c++/4.8.3/x86_64-redhat-linux/bits/c++config.h \
  /usr/include/c++/4.8.3/x86_64-redhat-linux/bits/os_defines.h \
  /usr/include/c++/4.8.3/x86_64-redhat-linux/bits/cpu_defines.h \
- /usr/include/c++/4.8.3/bits/stringfwd.h \
- /usr/include/c++/4.8.3/bits/memoryfwd.h \
- /usr/include/c++/4.8.3/bits/postypes.h /usr/include/c++/4.8.3/cwchar \
- /usr/include/c++/4.8.3/exception \
- /usr/include/c++/4.8.3/bits/atomic_lockfree_defines.h \
- /usr/include/c++/4.8.3/bits/char_traits.h \
- /usr/include/c++/4.8.3/bits/stl_algobase.h \
  /usr/include/c++/4.8.3/bits/functexcept.h \
  /usr/include/c++/4.8.3/bits/exception_defines.h \
  /usr/include/c++/4.8.3/bits/cpp_type_traits.h \
@@ -56,6 +48,23 @@ client.o client.d : client.cc /usr/include/stdc-predef.h client.h \
  /usr/include/c++/4.8.3/bits/stl_iterator_base_funcs.h \
  /usr/include/c++/4.8.3/debug/debug.h \
  /usr/include/c++/4.8.3/bits/stl_iterator.h \
+ /usr/include/c++/4.8.3/bits/allocator.h \
+ /usr/include/c++/4.8.3/x86_64-redhat-linux/bits/c++allocator.h \
+ /usr/include/c++/4.8.3/ext/new_allocator.h /usr/include/c++/4.8.3/new \
+ /usr/include/c++/4.8.3/exception \
+ /usr/include/c++/4.8.3/bits/atomic_lockfree_defines.h \
+ /usr/include/c++/4.8.3/bits/memoryfwd.h \
+ /usr/include/c++/4.8.3/bits/stl_construct.h \
+ /usr/include/c++/4.8.3/ext/alloc_traits.h \
+ /usr/include/c++/4.8.3/bits/stl_uninitialized.h \
+ /usr/include/c++/4.8.3/bits/stl_vector.h \
+ /usr/include/c++/4.8.3/bits/stl_bvector.h \
+ /usr/include/c++/4.8.3/bits/range_access.h \
+ /usr/include/c++/4.8.3/bits/vector.tcc /usr/include/c++/4.8.3/fstream \
+ /usr/include/c++/4.8.3/istream /usr/include/c++/4.8.3/ios \
+ /usr/include/c++/4.8.3/iosfwd /usr/include/c++/4.8.3/bits/stringfwd.h \
+ /usr/include/c++/4.8.3/bits/postypes.h /usr/include/c++/4.8.3/cwchar \
+ /usr/include/c++/4.8.3/bits/char_traits.h \
  /usr/include/c++/4.8.3/bits/localefwd.h \
  /usr/include/c++/4.8.3/x86_64-redhat-linux/bits/c++locale.h \
  /usr/include/c++/4.8.3/clocale /usr/include/locale.h \
@@ -68,14 +77,11 @@ client.o client.d : client.cc /usr/include/stdc-predef.h client.h \
  /usr/include/bits/timex.h /usr/include/bits/setjmp.h \
  /usr/include/c++/4.8.3/x86_64-redhat-linux/bits/atomic_word.h \
  /usr/include/c++/4.8.3/bits/locale_classes.h \
- /usr/include/c++/4.8.3/string /usr/include/c++/4.8.3/bits/allocator.h \
- /usr/include/c++/4.8.3/x86_64-redhat-linux/bits/c++allocator.h \
- /usr/include/c++/4.8.3/ext/new_allocator.h /usr/include/c++/4.8.3/new \
+ /usr/include/c++/4.8.3/string \
  /usr/include/c++/4.8.3/bits/ostream_insert.h \
  /usr/include/c++/4.8.3/bits/cxxabi_forced.h \
  /usr/include/c++/4.8.3/bits/stl_function.h \
  /usr/include/c++/4.8.3/backward/binders.h \
- /usr/include/c++/4.8.3/bits/range_access.h \
  /usr/include/c++/4.8.3/bits/basic_string.h \
  /usr/include/c++/4.8.3/bits/basic_string.tcc \
  /usr/include/c++/4.8.3/bits/locale_classes.tcc \
@@ -94,4 +100,5 @@ client.o client.d : client.cc /usr/include/stdc-predef.h client.h \
  /usr/include/c++/4.8.3/bits/codecvt.h /usr/include/c++/4.8.3/cstdio \
  /usr/include/c++/4.8.3/x86_64-redhat-linux/bits/basic_file.h \
  /usr/include/c++/4.8.3/x86_64-redhat-linux/bits/c++io.h \
- /usr/include/c++/4.8.3/bits/fstream.tcc /usr/include/c++/4.8.3/iostream
+ /usr/include/c++/4.8.3/bits/fstream.tcc /usr/include/c++/4.8.3/iostream \
+ /usr/include/c++/4.8.3/sstream /usr/include/c++/4.8.3/bits/sstream.tcc

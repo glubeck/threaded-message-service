@@ -18,11 +18,11 @@ using namespace std;
 class Message {
 
  public:
-  Message(string& firstLine, string& command, string& fileName,
+  Message(string& firstLine, string& name, string& fileName,
 	  int& length, string& value, bool needed) {
     
     this->firstLine = firstLine;
-    this->command = command;
+    this->name = name;
     this->fileName = fileName;
     this->length = length;
     this->value = value;
@@ -31,7 +31,7 @@ class Message {
    Message() {
 
      this->firstLine = "";
-     this->command = "";
+     this->name = "";
      this->fileName = "";
      this->length = 0;
      this->value = "";
@@ -40,18 +40,12 @@ class Message {
    //~Message();
 
    string firstLine;
-   string command; 
+   string name; 
    string fileName; 
    int length;
    string value;
    bool needed;
    
-   string getCommand() {
-     return command;
-   }
-   void setCommand(string command) {
-     this->command = command;
-   }
 
    string getFileName() {
      return fileName;
@@ -104,7 +98,7 @@ protected:
     vector<string> splitCache(string, int);
     Message* parse_request(string);
     string get_value(int, int, string);
-    
+    void store(string, int);
     int server_;
     int buflen_;
     char* buf_;

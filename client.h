@@ -8,11 +8,11 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <unistd.h>
-
+#include <vector>
 #include <fstream>
 #include <iostream>
 #include <string>
-
+#include <sstream>
 using namespace std;
 
 class Client {
@@ -28,7 +28,8 @@ protected:
     void echo();
     bool send_request(string);
     bool get_response();
-
+    vector<string> parse_request(string);
+    bool isNumber(string);
     int server_;
     int buflen_;
     char* buf_;

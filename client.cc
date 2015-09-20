@@ -23,21 +23,75 @@ void Client::close_socket() {
 
 void Client::echo() {
     string line;
-    
+    cout << "%";
+
     // loop to handle user interface
     while (getline(cin,line)) {
+
+      string cache = "";
+      bool valid = false;
         // append a newline
         line += "\n";
-        // send request
-        bool success = send_request(line);
-        // break if an error occurred
-        if (not success)
+        
+	//parse request
+	vector<string> elements = parse_request(line);
+
+	if(elements[0] == "send" && elements.size() == 3) {
+	  valid = true;
+	  cout << "- Type your message. End with a blank line -" << endl;
+	  getline(cin,line);
+	  cache += line + "\n";
+	  while(line != "") {
+	    getline(cin,line);
+	    cache += line + "\n";
+	  }
+
+	  cache = cache.substr(0, cache.size()-1);
+
+	  stringstream cacheLength;
+	  cacheLength << cache.length();
+	  cache.insert(0, "put " + elements[1] + " " + elements[2] + " " + cacheLength.str() + "\n");
+ 
+	}
+    
+	if(elements[0] == "list" && elements.size() == 2) {
+	  valid = true;
+	  cache = elements[0] + " " + elements[1] + "\n";
+
+	}
+
+	if(elements[0] == "reset" && elements.size() == 1) {
+	  valid = true;
+	  cache = elements[0] + "\n";
+
+	}
+
+	if(elements[0] == "read" && elements.size() == 3 && isNumber(elements[2])) {
+	  valid = true;
+	  cache = "get " + elements[1] + " " + elements[2] + "\n";
+	}
+
+	if(elements[0] == "quit" && elements.size() == 1) {
+	  exit (EXIT_SUCCESS);
+	}
+
+	if(valid) {
+	  // send request
+	  bool success = send_request(cache);
+	  //break if an error occurred
+	  if (not success) {
+	    cout << "did not send" << endl;
+	    break;
+	  }
+	  // get a response
+	  success = get_response();
+	  // break if an error occurred
+	  if (not success) {
+	    cout << "did not get response";
             break;
-        // get a response
-        success = get_response();
-        // break if an error occurred
-        if (not success)
-            break;
+	  }
+	}
+	cout << "%";
     }
     close_socket();
 }
@@ -92,3 +146,26 @@ bool Client::get_response() {
     cout << response;
     return true;
 }
+
+vector<string> Client::parse_request(string line) {
+
+  stringstream ss(line);
+  string item;
+  vector<string> elems;
+  while(getline(ss, item, ' ')) {
+    elems.push_back(item);
+  }
+  if(elems.back().length() > 0)
+    elems.back() = elems.back().substr(0, elems.back().size()-1);
+  return elems;
+}
+
+bool Client::isNumber(string str) {
+
+  for (size_t i = 0; i < str.length(); i++)
+    if (!isdigit(str[i]))
+      return false;
+
+  return true;
+}
+

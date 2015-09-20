@@ -49,6 +49,8 @@ Server::handle(int client) {
   string request = get_request(client);
   string cache = request;
 
+  cout << cache << endl;
+
   while (1) {
     
     if (request.empty())
@@ -56,42 +58,20 @@ Server::handle(int client) {
 
     bool needed = false;
 
-    //Parse the Request
-    Message *message = parse_request(cache);
-	  
-    //if more bytes are needed, get more bytes from the buffer
-    if(message->needed) {
-
-      cache = get_value(client, message->length, cache);
-
-      //assign the cache to the message to be used later
-      message->value = cache;
-
+    
+    //split the message from the cache
+    vector<string> halves = half(request);
+   
+    //split the message into three parts
+    vector<string> elements = split(halves[0], ' ');
+    
+    if(elements[0] == "put" && elements.size() == 4) {
+      cout << "will store" << endl;
+      store(cache, client);
+    }    
+    
+    request = "";
     }
-
-    //erase the cache from the message
-    if(message->length == 0)
-      message->value.erase(message->length, message->value.length());
-    else
-      message->value.erase(message->length, message->value.length()-1);
-    
-    //erase the message from the cache
-    if(message->length > 0)
-      cache.erase(0, message->value.length()+message->firstLine.length()+1);
-    else
-      cache.erase(0, 1+message->firstLine.length());
-    
-    //store the message
-    storeMessage(message);
-    
-    //print out the responsee
-    stringstream ss;
-    ss << message->value.length();
-    cout << "Stored a file called " + message->fileName
-      + " with " + ss.str() + " bytes" << endl;
-    
-    
-  }
   close(client);
 }
 
@@ -122,7 +102,45 @@ string Server::get_value(int client, int messageLength, string cache) {
   }
   return cache2;
 }
-    
+
+void Server::store(string cache, int client) {
+
+  //parse the store request
+  Message *message = parse_request(cache);
+  
+  //if more bytes are needed, get more bytes from the buffer
+  if(message->needed) {
+
+    cache = get_value(client, message->length, cache);
+
+    //assign the cache to the message to be used later
+    message->value = cache;
+
+  }
+
+  //erase the cache from the message
+  if(message->length == 0)
+    message->value.erase(message->length, message->value.length());
+  else
+    message->value.erase(message->length, message->value.length()-1);
+  
+  //erase the message from the cache
+  if(message->length > 0)
+    cache.erase(0, message->value.length()+message->firstLine.length()+1);
+  else
+    cache.erase(0, 1+message->firstLine.length());
+  
+  //store the message
+  storeMessage(message);
+  
+  //print out the responsee
+  stringstream ss;
+  ss << message->value.length();
+  cout << "Stored a file called " + message->fileName
+    + " with " + ss.str() + " bytes" << endl;
+  
+}
+
 string
 Server::get_request(int client) {
     string request = "";
@@ -192,13 +210,13 @@ Message* Server::parse_request(string request) {
     vector<string> elements = split(halves[0], ' ');
     
     //if syntax is valid
-    if(elements[0] == "store" && elements.size() == 3) {
+    if(elements[0] == "put" && elements.size() == 4) {
       
-      //if third argument is number
-      if(isNumber(elements[2])) {
+      //if fourth argument is number
+      if(isNumber(elements[3])) {
 	
 	//convert to int
-	byteNum = atoi(elements[2].c_str());
+	byteNum = atoi(elements[3].c_str());
 	
 	//determine whether or not more bytes are needed
 	if(byteNum > request.length()) {
@@ -209,7 +227,7 @@ Message* Server::parse_request(string request) {
 	}
 	
 	//store in message variable
-	Message *message = new Message(halves[0], elements[0], elements[1], byteNum,
+	Message *message = new Message(halves[0], elements[1], elements[2], byteNum,
 	  			       halves[1], needed);
 	
 	return message;

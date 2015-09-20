@@ -89,8 +89,15 @@ echo-client.o echo-client.d : echo-client.cc /usr/include/stdc-predef.h \
  /usr/include/rpc/netdb.h /usr/include/bits/siginfo.h \
  /usr/include/bits/netdb.h /usr/include/libio.h /usr/include/_G_config.h \
  /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h \
- /usr/include/string.h /usr/include/c++/4.8.3/fstream \
+ /usr/include/string.h /usr/include/c++/4.8.3/vector \
+ /usr/include/c++/4.8.3/bits/stl_construct.h \
+ /usr/include/c++/4.8.3/ext/alloc_traits.h \
+ /usr/include/c++/4.8.3/bits/stl_uninitialized.h \
+ /usr/include/c++/4.8.3/bits/stl_vector.h \
+ /usr/include/c++/4.8.3/bits/stl_bvector.h \
+ /usr/include/c++/4.8.3/bits/vector.tcc /usr/include/c++/4.8.3/fstream \
  /usr/include/c++/4.8.3/bits/codecvt.h /usr/include/c++/4.8.3/cstdio \
  /usr/include/c++/4.8.3/x86_64-redhat-linux/bits/basic_file.h \
  /usr/include/c++/4.8.3/x86_64-redhat-linux/bits/c++io.h \
- /usr/include/c++/4.8.3/bits/fstream.tcc
+ /usr/include/c++/4.8.3/bits/fstream.tcc /usr/include/c++/4.8.3/sstream \
+ /usr/include/c++/4.8.3/bits/sstream.tcc
