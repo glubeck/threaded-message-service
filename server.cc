@@ -52,9 +52,9 @@ Server::handle(int client) {
    string cache = "";
 
   while (1) {
-   
+    bool valid = false;
     string request = get_request(client);
-    
+    bool success;
     if (request.empty())
       break;
     
@@ -68,24 +68,38 @@ Server::handle(int client) {
     vector<string> elements = split(halves[0], ' ');
     
     if(elements[0] == "put" && elements.size() == 4) {
-      //cout << "will store" << endl;
+      valid = true;
       store(cache, client);
-      send_response(client, "OK\n");
+      success = send_response(client, "OK\n");
     }
 
     if(elements[0] == "list" && elements.size() == 2) {
+      valid = true;
       string list = getList(elements[1]);
-      send_response(client, list);
+      success = send_response(client, list);
     }
 
     if(elements[0] == "get" && elements.size() == 3) {
+      valid = true;
       string message = retrieveMessage(elements[1], atoi(elements[2].c_str()));
-      send_response(client, message);
+
+      if(message == "name not found")
+	success = send_response(client, "error name not found\n");
+
+      if(message == "invalid index")
+	success = send_response(client, "error index invalid\n");
+      
+      success = send_response(client, message);
     }
 
     if(elements[0] == "reset" && elements.size() == 1) {
+      valid = true;
       messageMap.clear();
-      send_response(client, "OK\n");
+      success = send_response(client, "OK\n");
+    }
+    
+    if(!valid) {
+      success = send_response(client, "error invalid input\n");
     }
     
   }
@@ -128,34 +142,13 @@ void Server::store(string cache, int client) {
   //if more bytes are needed, get more bytes from the buffer
   if(message->needed) {
 
-    cache = get_value(client, message->length, cache);
-
-    //assign the cache to the message to be used later
-    message->value = cache;
+    message->value = get_value(client, message->length, message->value);
 
   }
-
-  //erase the cache from the message
-  if(message->length == 0)
-    message->value.erase(message->length, message->value.length());
-  else
-    message->value.erase(message->length, message->value.length()-1);
-  
-  //erase the message from the cache
-  if(message->length > 0)
-    cache.erase(0, message->value.length()+message->firstLine.length()+1);
-  else
-    cache.erase(0, 1+message->firstLine.length());
   
   //store the message
   storeMessage(message);
-  
-  //print out the responsee
-  //stringstream ss;
-  //ss << message->value.length();
-  //cout << "Stored a file called " + message->fileName
-  //  + " with " + ss.str() + " bytes" << endl;
-  
+   
 }
 
 string
@@ -190,6 +183,12 @@ Server::send_response(int client, string response) {
     int nleft = response.length();
     int nwritten;
     // loop to be sure it is all sent
+
+    if(response == "invalid input\n") {
+      perror("invalid input");
+      return false;
+    }
+    
     while (nleft) {
         if ((nwritten = send(client, ptr, nleft, 0)) < 0) {
             if (errno == EINTR) {
@@ -350,8 +349,15 @@ string Server::getList(string name) {
 
 string Server::retrieveMessage(string name, int index) {
 
+  if(messageMap.find(name) == messageMap.end())
+    return "name not found";
+  
   string response = "message ";
   vector<Message*> messages = messageMap[name];
+
+  if(index > messages.size())
+    return "invalid index";
+  
   Message* message = messages[index-1];
 
   stringstream messageLength;
