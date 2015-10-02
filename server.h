@@ -133,13 +133,14 @@ void handle(int client) {
   
    string cache = "";
 
-  while (1) {
     bool valid = false;
     string request = get_request(client);
     bool success;
-    if (request.empty())
-      break;
+    if (request.empty()) {
+      close(client);
     
+    return ;
+}
     cache = request;
     bool needed = false;
     
@@ -184,8 +185,8 @@ void handle(int client) {
       success = send_response(client, "error invalid input\n");
     }
     
-  }
-  close(client);
+  
+  
 }
 
 string get_value(int client, int messageLength, string cache) {
